@@ -1,8 +1,8 @@
 {
-  "name": "webbot",
+  "name": "kunzbot",
   "version": "1.0.0",
   "description": "Webbot will be my first chatbot",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
