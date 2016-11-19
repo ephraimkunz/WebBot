@@ -63,7 +63,23 @@ bot.dialog('/menu', [
 
 bot.dialog('/profile', [
 	function (session) {
-		
+		session.Prompts.text(session, "Let\'s start with your first name. Go ahead and enter it below.");
+	},
+	function (session, results) {
+		session.userData.firstName = results.response;
+		session.Prompts.text(session, "Now the last name.");
+	},
+	function (session, results) {
+		session.userData.lastName = results.response;
+		session.Prompts.time(session, "What is your date of birth?");
+	},
+	function(session, results){
+		session.userData.DOB = builder.EntityRecognizer.resolveTime([results.response]);
+		session.endDialog(
+			"Ok, this is the data I have on you:\nName: %s %s\nDOB: %s", 
+			session.userData.firstName,
+			session.userData.lastName,
+			session.userData.DOB.toString());
 	}]);
 
 bot.dialog('/dice', [
@@ -87,6 +103,6 @@ bot.dialog('/nospaces', [
 		builder.Prompts.text(session, "Paste or type in the string to remove whitespace from: ");
 	},
 	function (session, results) {
-		var whitesRemoved = results.response.replace(/\w/, '');
+		var whitesRemoved = results.response.replace(/\W/g, '');
 		session.endDialog(whitesRemoved);
 	}]);
