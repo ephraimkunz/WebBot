@@ -21,7 +21,7 @@ server.get(/.*/, restify.serveStatic({
 
 bot.dialog('/', [
 	function (session) {
-	session.send('Hello! I\'m the KunzBot and these are there are a few ways I can assist you today.');
+	session.send('There are there are a few ways I can assist you today.');
 	session.beginDialog('/menu');
 },
 function(session, results){
@@ -63,15 +63,15 @@ bot.dialog('/menu', [
 
 bot.dialog('/profile', [
 	function (session) {
-		session.Prompts.text(session, "Let\'s start with your first name. Go ahead and enter it below.");
+		builder.Prompts.text(session, "Let\'s start with your first name. Go ahead and enter it below.");
 	},
 	function (session, results) {
 		session.userData.firstName = results.response;
-		session.Prompts.text(session, "Now the last name.");
+		builder.Prompts.text(session, "Now the last name.");
 	},
 	function (session, results) {
 		session.userData.lastName = results.response;
-		session.Prompts.time(session, "What is your date of birth?");
+		builder.Prompts.time(session, "What is your date of birth?");
 	},
 	function(session, results){
 		session.userData.DOB = builder.EntityRecognizer.resolveTime([results.response]);
