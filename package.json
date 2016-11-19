@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "botbuilder": "^3.4.4",
+    "pretty-date": "^0.2.0",
     "restify": "^4.3.0"
   }
 }

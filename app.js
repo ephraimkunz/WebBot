@@ -1,5 +1,6 @@
 var restify = require('restify');
 var builder = require('botbuilder');
+var prettydate = require('pretty-date');
 
 //Setup Restify server
 var server = restify.createServer();
@@ -79,7 +80,7 @@ bot.dialog('/profile', [
 			"Ok, this is the data I have on you:\nName: %s %s\nDOB: %s", 
 			session.userData.firstName,
 			session.userData.lastName,
-			session.userData.DOB.toString());
+			prettydate.format(session.userData.DOB));
 	}]);
 
 bot.dialog('/dice', [
