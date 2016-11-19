@@ -19,34 +19,49 @@ server.get(/.*/, restify.serveStatic({
 	'default': 'index.html'
 }));
 
-var intents = new builder.IntentDialog();
+bot.dialog('/', [
+	function (session) {
+	session.send('Hello! I\'m the KunzBot and these are there are a few ways I can assist you today.');
+	session.beginDialog('/menu');
+},
+function(session, results){
+	session.endConversation('Until next time ...');
+}]);
 
-bot.dialog('/', intents);
-intents.matches(/^change name/i, [
-	function(session){
-		session.beginDialog('/profile');
+bot.dialog('/menu', [
+	function (session) {
+		builder.Prompts.choice(session, "Select an option:", [
+			"Remember your information",
+			"Roll a dice",
+			"Do basic math",
+			"Remove spaces from a string"]);
+
 	},
 	function (session, results) {
-		session.send('OK, changed your name to %s', session.userData.name);
-	}]);
-
-intents.onDefault([
-	function (session, args, next) {
-		if(!session.userData.name){
-			session.beginDialog('/profile');
-		}else {
-			next();
+		switch(results.response.index){
+			case 0:
+				session.beginDialog('/profile');
+				break;
+			case 1:
+				session.beginDialog('/dice');
+				break;
+			case 2:
+				session.beginDialog('/math');
+				break;
+			case 3:
+				session.beginDialog('/nospaces');
+				break;
+			default:
+				session.endDialog();
+				break;
 		}
 	},
-	function (session, results) {
-		session.send('Hello %s', session.userData.name);
-	}]);
+	function(session){
+		session.replaceDialog('/menu');
+	}
+	]).reloadAction('showMenu', null, {matches: /^(menu|back)/i});
 
 bot.dialog('/profile', [
-	function (session){
-		builder.Prompts.text(session, 'Hi!, What\'s your name?');
-	},
-	function (session, results) {
-		session.userData.name = results.response;
-		session.endDialog();
-	}])
+	function (session) {
+		
+	}]);
