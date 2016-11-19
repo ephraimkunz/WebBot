@@ -68,7 +68,7 @@ bot.dialog('/profile', [
 
 bot.dialog('/dice', [
 	function (session) {
-		var roll = Math.floor(Math.random() % 6) + 1;
+		var roll = Math.floor(Math.random() * 6) + 1;
 		session.endDialog("I rolled %s", roll.toString());
 	}]);
 
@@ -78,7 +78,7 @@ bot.dialog('/math', [
 	},
 	function (session, results) {
 		session.send("We will use the evil eval here.");
-		var result = eval(results.response.text);
+		var result = eval(results.response);
 		session.endDialog("The result is %s", result.toString());
 	}]);
 
@@ -87,6 +87,6 @@ bot.dialog('/nospaces', [
 		builder.Prompts.text(session, "Paste or type in the string to remove whitespace from: ");
 	},
 	function (session, results) {
-		var whitesRemoved = results.response.text.replace(/\w/, '');
+		var whitesRemoved = results.response.replace(/\w/, '');
 		session.endDialog(whitesRemoved);
 	}]);
