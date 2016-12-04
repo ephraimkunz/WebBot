@@ -1,6 +1,7 @@
 var restify = require('restify');
 var builder = require('botbuilder');
 var prettydate = require('pretty-date');
+var twitterClient = require('twitter-node-client').Twitter;
 
 //Setup Restify server
 var server = restify.createServer();
@@ -35,7 +36,8 @@ bot.dialog('/menu', [
 			"Remember your information",
 			"Roll a dice",
 			"Do basic math",
-			"Remove spaces from a string"]);
+			"Remove spaces from a string",
+			"Do sentiment analysis on tweets"]);
 
 	},
 	function (session, results) {
@@ -51,6 +53,9 @@ bot.dialog('/menu', [
 				break;
 			case 3:
 				session.beginDialog('/nospaces');
+				break;
+			case 4:
+				session.beginDialog('/sentiment-analysis');
 				break;
 			default:
 				session.endDialog();
@@ -107,3 +112,22 @@ bot.dialog('/nospaces', [
 		var whitesRemoved = results.response.replace(/\W/g, '');
 		session.endDialog(whitesRemoved);
 	}]);
+
+bot.dialog('/sentiment-analysis', [
+	function(session){
+		builder.Prompts.text(session, "Enter tweet search (prepend hashtag searches with #");
+	},
+	function(session, results){
+		session.send("Crunching the data...");
+		session.sendTyping();
+	 	var error = function (err, response, body) {
+        	console.log('ERROR [%s]', err);
+    	};
+	    var success = function (data) {
+	        console.log('Data [%s]', data);
+	        session.endDialog(data.toString());
+	    };
+	    var twitter = new twitterClient();
+	    twitter.getSearch({'q':'#haiku','count': 10}, error, success);
+	}
+	]);
