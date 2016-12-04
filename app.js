@@ -115,13 +115,14 @@ bot.dialog('/nospaces', [
 
 bot.dialog('/sentiment-analysis', [
 	function(session){
-		builder.Prompts.text(session, "Enter tweet search (prepend hashtag searches with #");
+		builder.Prompts.text(session, "Enter tweet search (prepend hashtag searches with #)");
 	},
 	function(session, results){
 		session.send("Crunching the data...");
 		session.sendTyping();
 	 	var error = function (err, response, body) {
         	console.log('ERROR [%s]', err);
+        	session.endDialog(err.toString() + response.toString());
     	};
 	    var success = function (data) {
 	        console.log('Data [%s]', data);
@@ -129,5 +130,4 @@ bot.dialog('/sentiment-analysis', [
 	    };
 	    var twitter = new twitterClient();
 	    twitter.getSearch({'q':'#haiku','count': 10}, error, success);
-	}
-	]);
+	}]);
