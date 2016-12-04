@@ -126,8 +126,6 @@ function buildAnalysisResult(analysis){
 	var result = '';
 	result += '\tTotal score = ' + analysis.score + '\t';
 	result += '\tComparative score = ' + analysis.comparative;
-	// result += '\tSome positive words = ' + analysis.positive.slice(0, 5) + '\n';
-	// result += '\tSome negative words = ' + analysis.negative.slice(0, 5) + '\n';
 	return result;
 }
 
@@ -157,16 +155,19 @@ bot.dialog('/sentiment-analysis', [
             .subtitle(data.statuses.length + ' tweets analyzed')
             .text(buildAnalysisResult(analysis));
             if(analysis.score > 0){
+            	//Smiley face
             	card.images([
                  	builder.CardImage.create(session, "https://s-media-cache-ak0.pinimg.com/originals/97/72/6f/97726fe8f02ba122e9436eb80a28fb2a.png")
             	]);	
             }
             else if(analysis.score < 0){
+            	//Angry face
             	card.images([
                  	builder.CardImage.create(session, "https://s-media-cache-ak0.pinimg.com/736x/f5/8b/ec/f58bece565008387c95ee25036b84ad3.jpg")
             	]);	
             }
             else{
+            	//Ambivalent face
 	            card.images([
 	                 builder.CardImage.create(session, "http://cosmouk.cdnds.net/15/35/1440495683-wpid-wp-1436657947930.jpeg")
 	            ]);
