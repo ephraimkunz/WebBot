@@ -12,6 +12,7 @@
     "botbuilder": "^3.4.4",
     "pretty-date": "^0.2.0",
     "restify": "^4.3.0",
+    "sentiment": "^2.1.0",
     "twitter-node-client": "0.0.6"
   }
 }
