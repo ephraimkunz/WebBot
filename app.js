@@ -124,8 +124,8 @@ bot.dialog('/nospaces', [
 // Text layout of results
 function buildAnalysisResult(analysis){
 	var result = '';
-	result += '\tTotal score = ' + analysis.score + '\t';
-	result += '\tComparative score = ' + analysis.comparative;
+	result += 'Total score = ' + analysis.score + '\t';
+	result += 'Comparative score = ' + (analysis.comparative).toFixed(3); //Round to 3 places
 	return result;
 }
 
@@ -169,9 +169,14 @@ bot.dialog('/sentiment-analysis', [
             else{
             	//Ambivalent face
 	            card.images([
-	                 builder.CardImage.create(session, "http://cosmouk.cdnds.net/15/35/1440495683-wpid-wp-1436657947930.jpeg")
+	                 builder.CardImage.openUrl(session, "http://cosmouk.cdnds.net/15/35/1440495683-wpid-wp-1436657947930.jpeg")
 	            ]);
         	}
+
+        	card.buttons([
+        			builder.CardAction.openUrl(session, 'http://www2.imm.dtu.dk/pubdb/views/publication_details.php?id=6010', 'Learn about sentiment analysis')
+        		]);
+
 	        var msg = new builder.Message(session).attachments([card]);
 	        session.endDialog(msg);
 		};
