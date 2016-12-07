@@ -5,10 +5,10 @@ var twitterClient = require('twitter-node-client').Twitter;
 var sentiment = require('sentiment');
 
 var twitterAuth = {
-	"consumerKey":"gLwyLjFl7nxKxfrlqqcZfm7b8",
-	"consumerSecret": "637BefF7DMZZo3tXf1eqgVeJLMeLj9fV76589fKZv07VBqO7Yw",
-	"accessToken": "3120259401-OWDAF2OXMW9lAia8Fg2Leozuup64GaEPE4RXJNZ",
-	"accessTokenSecret": "lO165m4gW6jFkJiXSsvScetYn5O0W7aTQSOJhkEkEG1Ji"
+	"consumerKey": process.env.TWITTER_CONSUMER_KEY,
+	"consumerSecret": process.env.TWITTER_CONSUMER_SECRET,
+	"accessToken": process.env.TWITTER_ACCESS_TOKEN,
+	"accessTokenSecret": process.env.TWITTER_ACCESS_TOKEN_SECRET
 }
 
 //Setup Restify server
@@ -144,7 +144,7 @@ bot.dialog('/sentiment-analysis', [
 	        data = JSON.parse(data);
 	        var tweetText = '';
 	        data.statuses.forEach(function(tweet){
-	        	tweetText += (' ' + tweet.text); //Space so we don't clobber words on the fault line
+	        	tweetText += (' ' + tweet.text); //Space so we don't clobber the start and end words
 	        });
 	        console.log(tweetText);
 
