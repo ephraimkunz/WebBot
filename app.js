@@ -143,7 +143,7 @@ bot.dialog("/stock_quote", [
 		session.sendTyping();
 
 		
-		var host = "https://api.iextrading.com/1.0/tops/last?" + encodeURI(results);
+		var host = "https://api.iextrading.com/1.0/tops/last?symbols=" + encodeURI(results.response);
 
 		callback = function(response) {
 			var str = '';
@@ -155,8 +155,8 @@ bot.dialog("/stock_quote", [
 
 			//the whole response has been recieved, so we just print it out here
 			response.on('end', function () {
-				var card = new HeroCard(session)
-					.title("Current stock price: " + results)
+				var card = new builder.HeroCard(session)
+					.title("Current stock price: " + results.response)
 					.text(JSON.stringify(str));
 				
 				var msg = new builder.Message(session).attachments([card]);
