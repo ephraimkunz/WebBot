@@ -3,7 +3,7 @@ var builder = require('botbuilder');
 var prettydate = require('pretty-date');
 var twitterClient = require('twitter-node-client').Twitter;
 var sentiment = require('sentiment');
-var http = require("http");
+var https = require("https");
 
 var twitterAuth = {
 	"consumerKey": process.env.TWITTER_CONSUMER_KEY,
@@ -142,9 +142,8 @@ bot.dialog("/stock_quote", [
 		session.send("Fetching stock quote...");
 		session.sendTyping();
 
-		var options = {
-			host:  "https://api.iextrading.com/1.0/last?symbols=" + encodeURI(results)
-		}
+		
+		var host = "https://api.iextrading.com/1.0/tops/last?" + encodeURI(results);
 
 		callback = function(response) {
 			var str = '';
@@ -165,7 +164,7 @@ bot.dialog("/stock_quote", [
 			});
 		}
 
-		http.request(options, callback).end();
+		https.request(host).end();
 	}
 ]);
 
