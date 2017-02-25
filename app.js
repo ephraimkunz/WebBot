@@ -146,6 +146,7 @@ bot.dialog("/stock_quote", [
 		var host = "https://api.iextrading.com/1.0/tops/last?symbols=" + encodeURI(results.response);
 
 		callback = function(response) {
+			console.log("Partial response " + JSON.stringify(response))
 			var str = '';
 
 			//another chunk of data has been recieved, so append it to `str`
@@ -155,6 +156,7 @@ bot.dialog("/stock_quote", [
 
 			//the whole response has been recieved, so we just print it out here
 			response.on('end', function () {
+				console.log("Full response " + str)
 				var card = new builder.HeroCard(session)
 					.title("Current stock price: " + results.response)
 					.text(JSON.stringify(str));
@@ -163,7 +165,7 @@ bot.dialog("/stock_quote", [
 	        	session.endDialog(msg);
 			});
 		}
-
+		console.log("Sending stock request to " + host);
 		https.request(host).end();
 	}
 ]);
