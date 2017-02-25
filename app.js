@@ -3,6 +3,7 @@ var builder = require('botbuilder');
 var prettydate = require('pretty-date');
 var twitterClient = require('twitter-node-client').Twitter;
 var sentiment = require('sentiment');
+var http = require("http");
 
 var twitterAuth = {
 	"consumerKey": process.env.TWITTER_CONSUMER_KEY,
@@ -45,7 +46,8 @@ bot.dialog('/menu', [
 			"Roll a dice",
 			"Do basic math",
 			"Remove spaces from a string",
-			"Do sentiment analysis on tweets"]);
+			"Do sentiment analysis on tweets"],
+			"Get the IEX stock quote for a given symbol");
 
 	},
 	function (session, results) {
@@ -64,6 +66,9 @@ bot.dialog('/menu', [
 				break;
 			case 4:
 				session.beginDialog('/sentiment-analysis');
+				break;
+			case 5:
+				session.beginDialog('/stock_quote');
 				break;
 			default:
 				session.endDialog();
@@ -128,6 +133,41 @@ function buildAnalysisResult(analysis){
 	result += 'Comparative score = ' + (analysis.comparative).toFixed(3); //Round to 3 places
 	return result;
 }
+
+bot.dialog("/stock_quote", [
+	function(session){
+		builder.Prompts.text(session, "Enter the ticker symbol");
+	},
+	function(session, results){
+		session.send("Fetching stock quote...");
+		session.sendTyping();
+
+		var options = {
+			host:  "https://api.iextrading.com/1.0/last?symbols=" + encodeURI(results)
+		}
+
+		callback = function(response) {
+			var str = '';
+
+			//another chunk of data has been recieved, so append it to `str`
+			response.on('data', function (chunk) {
+				str += chunk;
+			});
+
+			//the whole response has been recieved, so we just print it out here
+			response.on('end', function () {
+				var card = new HeroCard(session)
+					.title("Current stock price: " + results)
+					.text(JSON.stringify(str));
+				
+				var msg = new builder.Message(session).attachments([card]);
+	        	session.endDialog(msg);
+			});
+		}
+
+		http.request(options, callback).end();
+	}
+]);
 
 bot.dialog('/sentiment-analysis', [
 	function(session){
