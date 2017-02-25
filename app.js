@@ -46,8 +46,8 @@ bot.dialog('/menu', [
 			"Roll a dice",
 			"Do basic math",
 			"Remove spaces from a string",
-			"Do sentiment analysis on tweets"],
-			"Get the IEX stock quote for a given symbol");
+			"Do sentiment analysis on tweets",
+			"Get the IEX stock quote for a given symbol"]);
 
 	},
 	function (session, results) {
